@@ -1,9 +1,8 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 import { Redirect, Route } from 'react-router-dom';
-import { BASE_URL } from '../../config/settings';
-import { getLoggedUser } from '../../rq/UserActions';
-import Spinner from '../layouts/Spinner';
+import Spinner from '../components/Spinner';
+import { BASE_URL } from '../config/settings';
+import { useAuth } from '../hooks';
 
 interface ProtectedRouteProps {
   exact?: boolean;
@@ -16,9 +15,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   path,
   ...rest
 }) => {
-  const { isSuccess, isLoading } = useQuery(['loadUser'], getLoggedUser, {
-    retry: 1,
-  });
+  const { isLoading, isSuccess } = useAuth();
   return (
     <Route
       {...rest}

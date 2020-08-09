@@ -6,25 +6,22 @@ import {
   withStyles,
 } from '@material-ui/core/styles';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Redirect, useLocation } from 'react-router-dom';
-import banner from '../../assets/images/banner.svg';
-import logo from '../../assets/images/logo.svg';
-import { BASE_URL } from '../../config/settings';
-import { RootState } from '../../rtk/RootState';
-import Footer from '../layouts/Footer';
-import Spinner from '../layouts/Spinner';
-import LoginForm from '../Login/LoginForm';
+import banner from '../assets/images/banner.svg';
+import logo from '../assets/images/logo.svg';
+import { BASE_URL } from '../config/settings';
+import { useAuth } from '../hooks';
+import Footer from '../components/Footer';
+import Spinner from '../components/Spinner';
+import LoginForm from '../components/forms/LoginForm';
 const Login: React.FC = () => {
   const classes = useStyles();
   const { state } = useLocation<{ from: string } | undefined>();
-  const { loading, isAuthenticated } = useSelector(
-    (state: RootState) => state.loggedUser
-  );
-  if (localStorage.authorization && loading) {
+  const { isLoading, isSuccess } = useAuth();
+  if (localStorage.authorization && isLoading) {
     return <Spinner open={true} />;
   }
-  if (isAuthenticated) {
+  if (isSuccess) {
     return state ? (
       <Redirect to={`${state.from}`} />
     ) : (
